@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('habit_days', function (Blueprint $table) {
             $table->id('had_id');
-            $table->unsignedBigInteger('had_hab_id')->index('idx_had_hab_id');
+            $table->foreignId('had_hab_id')->constrained('habits', 'hab_id');
             $table->enum('had_day', [
                 'lunes',
                 'martes',
@@ -23,6 +23,7 @@ return new class extends Migration
                 'sabado',
                 'domingo'
             ]);
+            $table->integer('had_status')->default(1);
             $table->timestamps();
         });
     }

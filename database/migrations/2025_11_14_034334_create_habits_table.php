@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('hab_icon');
             $table->enum('hab_type_recurrence', ['diaria', 'semanal', 'mensual', 'personalizado']);
             $table->integer('hab_status')->default(1);
-            $table->unsignedInteger('hab_use_id')->index('idx_hab_use_id');
+            $table->foreignId('hab_use_id')->constrained('users', 'id');
             $table->timestamps();
         });
     }

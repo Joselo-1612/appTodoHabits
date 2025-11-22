@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('activity_sections', function (Blueprint $table) {
             $table->id('acs_id');
-            $table->unsignedBigInteger('acs_pro_id')->index('idx_acs_pro_id');
             $table->string('acs_name');
+            $table->foreignId('acs_pro_id')->constrained('projects', 'pro_id');
             $table->integer('acs_status')->default(1);
             $table->timestamps();
         });

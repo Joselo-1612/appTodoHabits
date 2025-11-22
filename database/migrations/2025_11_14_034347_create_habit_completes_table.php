@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('habit_completes', function (Blueprint $table) {
             $table->id('hac_id');
-            $table->unsignedBigInteger('hac_hab_id')->index('idx_hac_hab_id');
+            $table->foreignId('hac_hab_id')->constrained('habits', 'hab_id');
             $table->date('hac_date');
-            $table->integer('hac_status')->default(1);
+            $table->integer('hac_is_done')->default(1);
             $table->text('hac_notes')->nullable();
+            $table->integer('hac_status')->default(1);
             $table->timestamps();
         });
     }
