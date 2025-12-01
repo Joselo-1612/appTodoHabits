@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('pro_date_start');
             $table->date('pro_date_end');
             $table->foreignId('pro_prg_id')->constrained('project_groups', 'prg_id');
-            $table->foreignId('pro_use_id')->constrained('users', 'id');
+            $table->foreignId('pro_use_id')->constrained('users', 'usu_id');
             $table->integer('pro_status')->default(1);
             $table->timestamps();
         });

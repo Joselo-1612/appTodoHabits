@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Habit;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class StoreCompleteHabitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'usu_email' => 'required|email',
-            'usu_password' => 'required|string|min:6',
+            'hac_date' => 'required',
+            'hac_is_done' => 'required|boolean',
+            'hac_notes' => 'nullable|string',
+            'hac_status' => 'required|boolean',
         ];
     }
 }

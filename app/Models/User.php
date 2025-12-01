@@ -11,17 +11,19 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasApiTokens, Notifiable;
+    use HasFactory, HasApiTokens, Notifiable, HasApiTokens;
 
+    protected $primaryKey = 'usu_id';
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'usu_name',
+        'usu_email',
+        'usu_password',
+        'usu_active'
     ];
 
     /**
@@ -30,8 +32,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'usu_password',
+        'usu_remember_token',
     ];
 
     /**
@@ -42,8 +44,65 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'usu_email_verified_at' => 'datetime',
+            'usu_password' => 'hashed',
         ];
+    }
+
+    // ------------------------
+    // Getters
+    // ------------------------
+
+    public function getUsuId()
+    {
+        return $this->usu_id;
+    }
+
+    public function getUsuName()
+    {
+        return $this->usu_name;
+    }
+
+    public function getUsuEmail()
+    {
+        return $this->usu_email;
+    }
+
+    public function getUsuPassword()
+    {
+        return $this->usu_password;
+    }
+
+    public function getUsuActive()
+    {
+        return $this->usu_active;
+    }
+
+    // ------------------------
+    // Setters
+    // ------------------------
+
+    public function setUsuName($value)
+    {
+        $this->usu_name = $value;
+        return $this;
+    }
+
+    public function setUsuEmail($value)
+    {
+        $this->usu_email = $value;
+        return $this;
+    }
+
+    public function setUsuPassword($value)
+    {
+        $this->usu_password = $value;
+        return $this;
+    }
+
+    public function setUsuActive($value)
+    {
+        $this->usu_active = $value;
+        return $this;
     }
 }

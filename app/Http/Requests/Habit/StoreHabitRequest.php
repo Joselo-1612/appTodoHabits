@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Habit;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class StoreHabitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,11 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'usu_email' => 'required|email',
-            'usu_password' => 'required|string|min:6',
+            "hab_name" => "required|string",
+            "hab_description" => "required|nullable|string",
+            "hab_icon" => "required|string",
+            "hab_type_recurrence" => "required|string",
+            "hab_use_id" => "required"
         ];
     }
 }
