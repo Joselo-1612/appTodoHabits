@@ -16,12 +16,18 @@ class Habit extends Model
         'hab_icon',
         'hab_type_recurrence',
         'hab_status',
-        'hab_use_id'
+        'hab_use_id',
+        'hab_date'
     ];
 
     // ------------------------
     // Getters
     // ------------------------
+
+    public function getHabId()
+    {
+        return $this->hab_id;
+    }
 
     public function getHabName()
     {
@@ -51,6 +57,11 @@ class Habit extends Model
     public function getHabUseId()
     {
         return $this->hab_use_id;
+    }
+
+    public function getHabDate()
+    {
+        return $this->hab_date;
     }
 
     // ------------------------
@@ -91,5 +102,29 @@ class Habit extends Model
     {
         $this->hab_use_id = $value;
         return $this;
+    }
+
+    public function setHabDate($value)
+    {
+        $this->hab_date = $value;
+        return $this;
+    }
+
+    public function setHabId($value)
+    {
+        $this->hab_id = $value;
+        return $this;
+    }
+
+    // ------------------------ relationships ------------------------
+
+    public function habitCompletes()
+    {
+        return $this->hasMany(HabitComplete::class, 'hac_hab_id', 'hab_id');
+    }
+
+    public function habitDays()
+    {
+        return $this->hasMany(HabitDay::class, 'had_hab_id', 'hab_id');
     }
 }

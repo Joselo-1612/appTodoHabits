@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('hab_type_recurrence', ['diaria', 'semanal', 'mensual', 'personalizado']);
             $table->integer('hab_status')->default(1);
             $table->foreignId('hab_use_id')->constrained('users', 'usu_id');
+            $table->date('hab_date');
             $table->timestamps();
         });
     }

@@ -6,12 +6,17 @@ use App\Helpers\StatusModel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Habit\StoreHabitRequest;
 use App\Http\Responses\ApiResponse;
+use App\Services\HabitService;
 use App\Models\Habit;
 use Illuminate\Validation\ValidationException;
 
 class HabitController extends Controller
 {
-    public function list() {
+    public function __construct(
+        protected HabitService $habitService
+    ) {}
+
+    public function getlistHabitsActive() {
 
         $listHabits = Habit::where('hab_status', 1)->get();
 
@@ -22,14 +27,15 @@ class HabitController extends Controller
         );
     }
 
-    public function register(StoreHabitRequest $request){
+    public function registerHabit(StoreHabitRequest $request){
 
         try {
             $data = $request->validated();
-            $newHabist = Habit::create($data);
+
+            $newHabit = $this->habitService->registerHabitAndHabitDays($data);
 
             return ApiResponse::successResponse(
-                $newHabist,
+                $newHabit,
                 "habit registed succesfully",
                 201
             );
@@ -43,7 +49,7 @@ class HabitController extends Controller
         }
     }
 
-    public function update(StoreHabitRequest $request, string $habitId) {
+    public function updateHabit(StoreHabitRequest $request, string $habitId) {
 
         $habitDetail = Habit::findOrFail($habitId);
         $data = $request->validated();
@@ -56,7 +62,7 @@ class HabitController extends Controller
         );
     }
 
-    public function delete(string $habitId) {
+    public function deleteHabit(string $habitId) {
 
         $habitDetail = Habit::findOrFail($habitId);
         $habitDetail->update([

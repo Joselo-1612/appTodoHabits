@@ -2,50 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\StatusHabitComplete;
-use App\Http\Requests\Habit\StoreCompleteHabitRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\HabitComplete;
 use Illuminate\Validation\ValidationException;
 
 class HabitCompleteController extends Controller
 {
-    public function doneHabit(StoreCompleteHabitRequest $request) {
-
-        try {
-            $data = $request->validated();
-
-            $newHabit = HabitComplete::create($data);
-
-            return ApiResponse::successResponse(
-                $newHabit,
-                'done habit successfully',
-                201
-            );
-
-        } catch (ValidationException $e) {
-            return ApiResponse::errorResponse(
-                'Error validating request data',
-                422,
-                $e->getMessage()
-            );
-        }
-
-    }
-
-    public function skippedHabit($habitId){
+    public function doneOrSkippedHabit($habitId, $status, $note) {
 
         try {
 
             $habitComplete = HabitComplete::findOrFail($habitId);
 
             $habitComplete->update([
-                "hac_is_done" => StatusHabitComplete::SKIPPED
+                "hac_is_done" => $status,
+                "hac_note" => $note,
             ]);
 
             return ApiResponse::successResponse(
                 $habitComplete->getChanges(),
-                'skipped habit successfully',
+                "habit complete updated successfully",
                 200
             );
 

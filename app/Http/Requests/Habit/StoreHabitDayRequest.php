@@ -4,7 +4,7 @@ namespace App\Http\Requests\Habit;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreHabitRequest extends FormRequest
+class StoreHabitDayRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,8 @@ class StoreHabitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "hab_name" => "required|string",
-            "hab_description" => "required|nullable|string",
-            "hab_icon" => "required|string",
-            "hab_type_recurrence" => "required|string",
-            "hab_use_id" => "required",
-            "hab_date" => "required|date",
+            "had_hab_id" => "required",
+            "had_day" => "required|string",
         ];
     }
 }
