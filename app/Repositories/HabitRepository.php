@@ -27,7 +27,7 @@ class HabitRepository
     public function getListHabitCalendar() {
         $userIdSession = UtilHelper::userSessionId();
 
-        return Habit::select('hab_id','hab_name', 'hab_type_recurrence', 'hab_schedule_ini', 'had_day')
+        return Habit::select('hab_id','hab_name', 'hab_type_recurrence', 'hab_schedule_ini', 'had_day', 'had_description')
                     ->leftJoin('habit_days', 'habits.hab_id', 'habit_days.had_hab_id')
                     ->where('hab_status', HabitEnum::ACTIVE->value)
                     ->where('hab_use_id', $userIdSession)->get();

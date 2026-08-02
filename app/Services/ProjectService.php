@@ -75,14 +75,20 @@ class ProjectService
                     $query->select(
                         'act_id',
                         'act_sea_id',
-                        'act_name',
                         'act_description',
+                        'act_name',
+                        // 'act_position',
                         'act_date_start',
                         'act_date_end',
                     )
-                    ->with(['tags' => function ($query) {
-                        $query->select('tag_color');
-                    }])
+                    ->with([
+                        'tasks' => function ($query) {
+                            $query->select('ata_id', 'ata_name', 'ata_act_id', 'ata_is_done');
+                        },
+                        'tags' => function ($query) {
+                            $query->select('tag_color', 'tag_name');
+                        }
+                    ])
                     ->orderBy('act_position', 'asc')
                     ->get()
                     ->where('act_status', ProjectEnum::ACTIVE->value);

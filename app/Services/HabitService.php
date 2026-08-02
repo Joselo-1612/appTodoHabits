@@ -32,6 +32,8 @@ class HabitService
         $currentMonth = DateHelper::getCurrentMonth($month);
         $habitService = $this->habitRepository->getListHabitCalendar();
 
+        Log::info("Hábitos del calendario: " . json_encode($habitService));
+
         // Indexar hábitos (clave de optimización)
         $dailyHabits = [];
         $weeklyHabits = [];
@@ -70,20 +72,20 @@ class HabitService
 
             // DIARIOS → siempre entran
             foreach ($dailyHabits as $habit) {
-                $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name];
+                $habitListCalendar[$date][] = ["hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name, "had_day" => $habit->had_day, "had_description" => $habit->had_description];
             }
 
             // SEMANALES / PERSONALIZADOS → por día de semana
             foreach ($weeklyHabits as $habit) {
                 if ($habit->had_day === $dayText) {
-                    $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name];
+                    $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name, "had_day" => $habit->had_day, "had_description" => $habit->had_description];
                 }
             }
 
             // MENSUALES → por número de día
             foreach ($monthlyHabits as $habit) {
                 if (DateHelper::getConvertDateTimeToDayNumber($habit->hab_schedule_ini) === $dayNumber) {
-                    $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name];
+                    $habitListCalendar[$date][] = [ "hab_id" => $habit->hab_id, "hab_name" => $habit->hab_name, "had_day" => $habit->had_day, "had_description" => $habit->had_description];
                 }
             }
         }

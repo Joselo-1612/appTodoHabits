@@ -31,4 +31,8 @@ class Activity extends Model
         return $this->belongsTo(ActivitySection::class, 'act_sea_id', 'acs_id');
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(ActivityTask::class, 'ata_act_id', 'act_id');
+    }
 }

@@ -37,6 +37,27 @@ class ActivityController
         }
     }
 
+    public function update(Request $request){
+        try {
+
+            $newActivity = $this->activityService->updateAcitvity($request->all());
+
+            return ApiResponse::successResponse(
+                $newActivity,
+                "activity created successfully",
+                201
+            );
+
+        } catch (ValidationException $e) {
+            return ApiResponse::errorResponse(
+                'Error validating request data',
+                422,
+                $e->getMessage()
+            );
+        }    
+    // updateAcitvity
+    }
+
     public function updateActivitySection(Request $request, int $sectionId, int $activityId) {
         try {
 

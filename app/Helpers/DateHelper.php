@@ -105,4 +105,10 @@ class DateHelper
         $date = new DateTime($date);
         return $date->format('Y-m-d');
     }
+
+    public static function getCurrentDate(){
+        $currentDate = new DateTime();
+
+        return $currentDate->format('Y-m-d');
+    }
 }

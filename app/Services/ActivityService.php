@@ -3,10 +3,14 @@
 namespace App\Services;
 
 use App\Enums\ProjectEnum;
+use App\Helpers\DateHelper;
 use App\Models\Activity;
 use App\Models\ActivitySection;
+use App\Models\ActivityTask;
 use App\Repositories\ProjectRepository;
 use Carbon\Carbon;
+use DB;
+use Illuminate\Console\View\Components\Task;
 use Log;
 
 class ActivityService
@@ -51,6 +55,42 @@ class ActivityService
             "act_status" => ProjectEnum::ACTIVE->value,
             "act_position" => $positionAcvitity
         ]);
+    }
+
+    public function updateAcitvity(array $data) {
+        $this->updateMassiveTasks($data['tasks'], $data['act_id']);
+        return Activity::where('act_id', $data['act_id'])
+            ->update([
+                'act_name' => $data['act_name'],
+                'act_description' => $data['act_description'],
+                'act_date_start' => $data['act_date_start'],
+                'act_date_end' => $data['act_date_end'],
+            ]);
+    }
+
+    public function updateMassiveTasks(array $tasks, int $activityId): void
+    {
+        $currentDate = DateHelper::getCurrentDate();
+
+        DB::transaction(function () use ($tasks, $activityId, $currentDate) {
+
+            ActivityTask::where('ata_act_id', $activityId)->delete();
+
+            $rows = [];
+
+            foreach ($tasks as $task) {
+                $rows[] = [
+                    'ata_name' => $task['ata_name'],
+                    'ata_description' => '',
+                    'ata_date' => $currentDate,
+                    'ata_act_id' => $activityId,
+                ];
+            }
+
+            if (!empty($rows)) {
+                ActivityTask::insert($rows);
+            }
+        });
     }
 
     public function createSectionActivity(array $data)
