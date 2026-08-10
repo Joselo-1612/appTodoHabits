@@ -7,10 +7,11 @@ use App\Helpers\DateHelper;
 use App\Models\Activity;
 use App\Models\ActivitySection;
 use App\Models\ActivityTask;
+use App\Models\ActivityXTag;
+use App\Models\Tag;
 use App\Repositories\ProjectRepository;
 use Carbon\Carbon;
 use DB;
-use Illuminate\Console\View\Components\Task;
 use Log;
 
 class ActivityService
@@ -59,6 +60,7 @@ class ActivityService
 
     public function updateAcitvity(array $data) {
         $this->updateMassiveTasks($data['tasks'], $data['act_id']);
+        $this->updateMassiveTags($data['tags'], $data['act_id']);
         return Activity::where('act_id', $data['act_id'])
             ->update([
                 'act_name' => $data['act_name'],
@@ -68,7 +70,7 @@ class ActivityService
             ]);
     }
 
-    public function updateMassiveTasks(array $tasks, int $activityId): void
+    private function updateMassiveTasks(array $tasks, int $activityId): void
     {
         $currentDate = DateHelper::getCurrentDate();
 
@@ -93,6 +95,46 @@ class ActivityService
         });
     }
 
+    private function updateMassiveTags(array $tags, int $activityId): void
+    {
+        $currentDate = DateHelper::getCurrentDate();
+
+        Log::info("val-tags", [$tags]);
+        Log::info("val-activityId", [$activityId]);
+
+        DB::transaction(function () use ($tags, $activityId, $currentDate) {
+
+            // ActivityXTag::where('axt_act_id', $activityId)->delete();
+
+            $rows = [];
+
+            foreach ($tags as $index => $tag) {
+
+                Log::info("val-pivot $index", $tag["pivot"] ?? null);
+
+                // if ($tag['pivot']) {
+                //     $rows[] = [
+                //         'axt_tag_id' => $tag['axt_tag_id'],
+                //         'axt_act_id' => $activityId,
+                //     ];
+                // }
+
+            }
+
+            // if (!empty($rows)) {
+            //     ActivityXTag::insert($rows);
+            // }
+        });
+    }
+
+    private function createtag($tag){
+        Tag::create([
+            'tag_name' => $tag["tag_name"],
+            'tag_color' => $tag["tag_color"],
+            'tag_status' => ProjectEnum::ACTIVE->value
+        ]);
+    }
+
     public function createSectionActivity(array $data)
     {
         return ActivitySection::create([
@@ -105,5 +147,29 @@ class ActivityService
     public function updateActivyBySection(int $sectionId, int $activityId, int $positionActivity){
         return Activity::where('act_id', $activityId)
             ->update(['act_sea_id' => $sectionId, 'act_position' => $positionActivity]);
+    }
+
+    public function createTask(array $data) {
+
+        return ActivityTask::create([
+            'ata_id' => $data['ata_id'],
+            'ata_name' => $data['ata_name'],
+            'ata_description' => $data['ata_description'],
+            'ata_date' => $data['ata_date'],
+            'ata_remind' => $data['ata_remind'],
+            'ata_is_done' => $data['ata_is_done'],
+            'ata_status' => ProjectEnum::ACTIVE->value,
+            'ata_act_id' => $data['ata_act_id']
+        ]);
+    }
+
+    public function updateTask(array $data){
+        return ActivityTask::where('ata_id', $data['ata_id'])
+            ->update([
+                'ata_name' => $data['ata_name'],
+                'ata_is_done' => $data['ata_is_done'],
+                'ata_status' => $data['ata_status'],
+                'ata_act_id' => $data['ata_act_id']
+            ]);
     }
 }

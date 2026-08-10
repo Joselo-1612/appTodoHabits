@@ -54,8 +54,7 @@ class ActivityController
                 422,
                 $e->getMessage()
             );
-        }    
-    // updateAcitvity
+        }
     }
 
     public function updateActivitySection(Request $request, int $sectionId, int $activityId) {
