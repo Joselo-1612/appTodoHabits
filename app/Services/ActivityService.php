@@ -7,12 +7,11 @@ use App\Helpers\DateHelper;
 use App\Models\Activity;
 use App\Models\ActivitySection;
 use App\Models\ActivityTask;
-use App\Models\ActivityXTag;
 use App\Models\Tag;
 use App\Repositories\ProjectRepository;
 use Carbon\Carbon;
 use DB;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class ActivityService
 {
@@ -86,6 +85,7 @@ class ActivityService
                     'ata_description' => '',
                     'ata_date' => $currentDate,
                     'ata_act_id' => $activityId,
+                    'ata_is_done' => $task['ata_is_done']
                 ];
             }
 
@@ -110,7 +110,7 @@ class ActivityService
 
             foreach ($tags as $index => $tag) {
 
-                Log::info("val-pivot $index", $tag["pivot"] ?? null);
+                Log::info("val-pivot $index");
 
                 // if ($tag['pivot']) {
                 //     $rows[] = [
